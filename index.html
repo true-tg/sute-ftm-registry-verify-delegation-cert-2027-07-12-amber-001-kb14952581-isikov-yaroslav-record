@@ -138,9 +138,32 @@
         }
 
         /* ==========================================================================
-           НАПІВПРОЗОРА КАРТКА (APPLE GLASSES / HIG)
+           3D-СЦЕНА ТА ПЕРЕГОРТАННЯ КАРТКИ (APPLE WALLET / APPLE PAY)
            ========================================================================== */
-        .document-card {
+        .flip-scene {
+            perspective: 1800px;
+            width: 100%;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            display: grid;
+            transform-style: preserve-3d;
+            transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .flip-scene.is-flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            grid-area: 1 / 1;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             background: var(--glass-surface);
             backdrop-filter: blur(44px) saturate(180%);
             -webkit-backdrop-filter: blur(44px) saturate(180%);
@@ -150,9 +173,18 @@
                 0 24px 48px rgba(0, 0, 0, 0.25),
                 inset 0 1px 0 0 var(--glass-highlight);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        /* Шапка документа */
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* ==========================================================================
+           ЛИЦЬОВА СТОРОНА ДОКУМЕНТА
+           ========================================================================== */
         .card-header {
             padding: 28px 36px 24px 36px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.14);
@@ -178,6 +210,12 @@
             text-transform: uppercase;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .reg-box {
             background: var(--glass-subsurface);
             border: 1px solid rgba(255, 255, 255, 0.18);
@@ -197,6 +235,27 @@
             font-weight: 600;
             color: #FFFFFF;
             font-variant-numeric: tabular-nums;
+        }
+
+        .flip-hint-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--glass-subsurface);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .flip-scene:hover .flip-hint-btn {
+            background: rgba(255, 255, 255, 0.18);
+            transform: scale(1.06);
         }
 
         /* Основна сітка */
@@ -333,6 +392,49 @@
         }
 
         /* ==========================================================================
+           ЗВОРОТНА СТОРОНА ДОКУМЕНТА (ОФІЦІЙНИЙ ТЕКСТ НАПРАВЛЕННЯ)
+           ========================================================================== */
+        .back-content {
+            padding: 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 24px;
+            flex: 1;
+        }
+
+        .back-statement {
+            background: var(--glass-subsurface);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 18px;
+            padding: 28px 32px;
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.65;
+            color: var(--text-primary);
+        }
+
+        .back-note {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 14px;
+            padding: 18px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.55;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .back-note svg {
+            flex-shrink: 0;
+            color: #FFFFFF;
+            opacity: 0.85;
+        }
+
+        /* ==========================================================================
            ЗАХИСНА БІЖУЧА СТРІЧКА З АКТУАЛЬНИМ ЧАСОМ (ЗАХИСТ ВІД СКРІНШОТІВ)
            ========================================================================== */
         .security-ticker {
@@ -368,9 +470,13 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
             .reg-box {
                 text-align: left;
-                width: 100%;
+                flex: 1;
             }
             .card-body {
                 grid-template-columns: 1fr;
@@ -382,6 +488,13 @@
             .photo-frame {
                 width: 150px;
                 height: 200px;
+            }
+            .back-content {
+                padding: 24px;
+            }
+            .back-statement {
+                padding: 20px;
+                font-size: 15px;
             }
         }
     </style>
@@ -404,74 +517,133 @@
             </div>
         </header>
 
-        <!-- Основна напівпрозора картка -->
-        <main class="document-card">
-            <div class="card-header">
-                <div class="doc-title-group">
-                    <h1>ПОСВІДЧЕННЯ-НАПРАВЛЕННЯ</h1>
-                    <div class="en-title">Delegation Certificate</div>
-                </div>
-                <div class="reg-box">
-                    <div class="reg-label">Реєстраційний номер</div>
-                    <div class="reg-value">№ 07-12/AMBER-2027/001</div>
-                </div>
-            </div>
-
-            <div class="card-body">
-                <!-- Ліва колонка: Фото 3×4 та студентський -->
-                <div class="photo-column">
-                    <div class="photo-frame">
-                        <!-- Покладіть фото у корінь репозиторію з назвою photo.jpg -->
-                        <img src="photo.jpg" alt="Ісіков Ярослав Андрійович" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22204%22 height=%22272%22 viewBox=%220 0 204 272%22><rect width=%22204%22 height=%22272%22 fill=%22rgba(255,255,255,0.08)%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22rgba(255,255,255,0.7)%22 font-family=%22sans-serif%22 font-size=%2213%22>Фото 3×4 (photo.jpg)</text></svg>'">
-                    </div>
-
-                    <div class="student-id-box">
-                        <span class="student-id-label">Студентський</span>
-                        <span class="student-id-val">КВ 14952581</span>
-                    </div>
-                </div>
-
-                <!-- Права колонка: Дані -->
-                <div class="info-column">
-                    <div class="person-header">
-                        <div class="person-name-ua">Ісіков Ярослав Андрійович</div>
-                        <div class="person-name-en">Isikov Yaroslav</div>
-                    </div>
-
-                    <div class="data-grid">
-                        <div class="data-item">
-                            <span class="data-label">Дата народження</span>
-                            <span class="data-value">08.12.2006</span>
+        <!-- Інтерактивна 3D-картка з перегортанням -->
+        <main class="flip-scene" id="flipCard" title="Натисніть, щоб перегорнути документ">
+            <div class="flip-card-inner">
+                
+                <!-- ЛИЦЬОВА СТОРОНА -->
+                <div class="card-face card-front">
+                    <div>
+                        <div class="card-header">
+                            <div class="doc-title-group">
+                                <h1>ПОСВІДЧЕННЯ-НАПРАВЛЕННЯ</h1>
+                                <div class="en-title">Delegation Certificate</div>
+                            </div>
+                            <div class="header-right">
+                                <div class="reg-box">
+                                    <div class="reg-label">Реєстраційний номер</div>
+                                    <div class="reg-value">№ 07-12/AMBER-2027/001</div>
+                                </div>
+                                <div class="flip-hint-btn" aria-label="Детальніше">i</div>
+                            </div>
                         </div>
-                        <div class="data-item">
-                            <span class="data-label">Курс</span>
-                            <span class="data-value">3 курс</span>
-                        </div>
-                        <div class="data-item full-width">
-                            <span class="data-label">Факультет</span>
-                            <span class="data-value">Факультет торгівлі та маркетингу</span>
-                        </div>
-                        <div class="data-item full-width">
-                            <span class="data-label">Спеціальність</span>
-                            <span class="data-value">Журналістика</span>
+
+                        <div class="card-body">
+                            <!-- Ліва колонка: Фото 3×4 та студентський -->
+                            <div class="photo-column">
+                                <div class="photo-frame">
+                                    <img src="photo.jpg" alt="Ісіков Ярослав Андрійович" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22204%22 height=%22272%22 viewBox=%220 0 204 272%22><rect width=%22204%22 height=%22272%22 fill=%22rgba(255,255,255,0.08)%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22rgba(255,255,255,0.7)%22 font-family=%22sans-serif%22 font-size=%2213%22>Фото 3×4 (photo.jpg)</text></svg>'">
+                                </div>
+
+                                <div class="student-id-box">
+                                    <span class="student-id-label">Студентський</span>
+                                    <span class="student-id-val">КВ 14952581</span>
+                                </div>
+                            </div>
+
+                            <!-- Права колонка: Дані -->
+                            <div class="info-column">
+                                <div class="person-header">
+                                    <div class="person-name-ua">Ісіков Ярослав Андрійович</div>
+                                    <div class="person-name-en">Isikov Yaroslav</div>
+                                </div>
+
+                                <div class="data-grid">
+                                    <div class="data-item">
+                                        <span class="data-label">Дата народження</span>
+                                        <span class="data-value">08.12.2006</span>
+                                    </div>
+                                    <div class="data-item">
+                                        <span class="data-label">Курс</span>
+                                        <span class="data-value">3 курс</span>
+                                    </div>
+                                    <div class="data-item full-width">
+                                        <span class="data-label">Факультет</span>
+                                        <span class="data-value">Факультет торгівлі та маркетингу</span>
+                                    </div>
+                                    <div class="data-item full-width">
+                                        <span class="data-label">Спеціальність</span>
+                                        <span class="data-value">Журналістика</span>
+                                    </div>
+                                </div>
+
+                                <div class="nomination-card">
+                                    <span class="nomination-label">Номінація у конкурсі</span>
+                                    <span class="nomination-value">Зовнішня реклама</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="nomination-card">
-                        <span class="nomination-label">Номінація у конкурсі</span>
-                        <span class="nomination-value">Зовнішня реклама</span>
+                    <!-- Біжуча стрічка верифікації -->
+                    <div class="security-ticker">
+                        <div class="ticker-track" id="tickerTrackFront"></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Біжуча стрічка верифікації -->
-            <div class="security-ticker">
-                <div class="ticker-track" id="tickerTrack"></div>
+                <!-- ЗВОРОТНА СТОРОНА -->
+                <div class="card-face card-back">
+                    <div>
+                        <div class="card-header">
+                            <div class="doc-title-group">
+                                <h1>ПІДСТАВА ТА ПРИЗНАЧЕННЯ</h1>
+                                <div class="en-title">Official Purpose &amp; Validity</div>
+                            </div>
+                            <div class="header-right">
+                                <div class="reg-box">
+                                    <div class="reg-label">Реєстраційний номер</div>
+                                    <div class="reg-value">№ 07-12/AMBER-2027/001</div>
+                                </div>
+                                <div class="flip-hint-btn" aria-label="Повернути">✕</div>
+                            </div>
+                        </div>
+
+                        <div class="back-content">
+                            <div class="back-statement">
+                                Цим засвідчується, що <strong>Ісіков Ярослав Андрійович</strong>, здобувач вищої освіти Державного торговельно-економічного університету, є переможцем Всеукраїнського студентського конкурсу торговельної реклами у номінації «Зовнішня реклама» та офіційно направляється до м.&nbsp;Гданськ (Республіка Польща) для участі у Європейському студентському форумі торговельної реклами AMBER, що відбудеться 23–26 червня 2027 року.
+                            </div>
+
+                            <div class="back-note">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                                    <circle cx="9" cy="10" r="2"></circle>
+                                    <path d="M15 8h2"></path>
+                                    <path d="M15 12h2"></path>
+                                    <path d="M7 16h10"></path>
+                                </svg>
+                                <span>Посвідчення дійсне за умови пред'явлення разом із паспортом громадянина України для виїзду за кордон.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Біжуча стрічка верифікації -->
+                    <div class="security-ticker">
+                        <div class="ticker-track" id="tickerTrackBack"></div>
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
 
     <script>
+        // Перегортання картки по кліку
+        const flipCard = document.getElementById('flipCard');
+        flipCard.addEventListener('click', () => {
+            flipCard.classList.toggle('is-flipped');
+        });
+
+        // Оновлення часу на обох сторонах картки
         function updateTicker() {
             const now = new Date();
             const dateStr = now.toLocaleDateString('uk-UA', {
@@ -486,8 +658,10 @@
             });
 
             const text = `• ДОКУМЕНТ ОНОВЛЕНО: ${dateStr} О ${timeStr} • ОНЛАЙН-ВЕРИФІКАЦІЯ ДТЕУ • № 07-12/AMBER-2027/001 `;
-            const track = document.getElementById('tickerTrack');
-            track.innerHTML = `<span>${text.repeat(4)}</span><span>${text.repeat(4)}</span>`;
+            const htmlContent = `<span>${text.repeat(4)}</span><span>${text.repeat(4)}</span>`;
+
+            document.getElementById('tickerTrackFront').innerHTML = htmlContent;
+            document.getElementById('tickerTrackBack').innerHTML = htmlContent;
         }
 
         updateTicker();
