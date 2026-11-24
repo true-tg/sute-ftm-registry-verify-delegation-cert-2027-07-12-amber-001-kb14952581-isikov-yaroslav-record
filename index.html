@@ -30,23 +30,14 @@
         */
 
         :root {
-            /* Базові темні поверхні Apple HIG */
-            --bg-canvas: #0D0D10;
-            --surface-glass: rgba(28, 28, 34, 0.72);
-            --surface-elevated: rgba(255, 255, 255, 0.04);
-            --border-subtle: rgba(255, 255, 255, 0.10);
-            --border-highlight: rgba(255, 255, 255, 0.16);
-
-            /* Палітра Dodger Blue з референсу */
-            --blue-100: #5B5AFF;
-            --blue-80: #7C7BFF;
-            --blue-60: #9D9CFF;
-            --blue-40: #BDBDFF;
-
-            /* Статусні та текстові кольори */
+            --bg-main: #5B5AFF;
+            --glass-surface: rgba(18, 18, 24, 0.42);
+            --glass-subsurface: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.24);
+            --glass-highlight: rgba(255, 255, 255, 0.35);
             --status-green: #32D74B;
-            --text-primary: #F5F5F7;
-            --text-secondary: #98989D;
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.72);
             --font-main: 'e-Ukraine', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         }
 
@@ -57,8 +48,7 @@
         }
 
         body {
-            background-color: var(--bg-canvas);
-            background-image: radial-gradient(circle at 50% 0%, rgba(91, 90, 255, 0.14) 0%, transparent 65%);
+            background-color: var(--bg-main);
             color: var(--text-primary);
             font-family: var(--font-main);
             min-height: 100vh;
@@ -99,7 +89,10 @@
             width: 38px;
             height: 38px;
             border-radius: 10px;
-            background-color: var(--blue-100);
+            background: rgba(18, 18, 24, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
             color: #FFFFFF;
             display: flex;
             align-items: center;
@@ -127,40 +120,42 @@
             gap: 8px;
             padding: 7px 14px;
             border-radius: 999px;
-            background-color: rgba(50, 215, 75, 0.12);
-            border: 1px solid rgba(50, 215, 75, 0.25);
+            background: rgba(18, 18, 24, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
             font-size: 13px;
             font-weight: 500;
-            color: var(--status-green);
+            color: #FFFFFF;
             white-space: nowrap;
         }
 
         .status-dot {
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background-color: var(--status-green);
         }
 
         /* ==========================================================================
-           КАРТКА ДОКУМЕНТА (APPLE GLASSES / HIG)
+           НАПІВПРОЗОРА КАРТКА (APPLE GLASSES / HIG)
            ========================================================================== */
         .document-card {
-            background: var(--surface-glass);
-            backdrop-filter: blur(40px) saturate(160%);
-            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            background: var(--glass-surface);
+            backdrop-filter: blur(44px) saturate(180%);
+            -webkit-backdrop-filter: blur(44px) saturate(180%);
             border-radius: 24px;
-            border: 1px solid var(--border-subtle);
+            border: 1px solid var(--glass-border);
             box-shadow: 
-                0 24px 48px rgba(0, 0, 0, 0.45),
-                inset 0 1px 0 0 var(--border-highlight);
+                0 24px 48px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 0 var(--glass-highlight);
             overflow: hidden;
         }
 
         /* Шапка документа */
         .card-header {
             padding: 28px 36px 24px 36px;
-            border-bottom: 1px solid var(--border-subtle);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -178,14 +173,14 @@
         .doc-title-group .en-title {
             font-size: 13px;
             font-weight: 500;
-            color: var(--blue-60);
+            color: var(--text-secondary);
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
 
         .reg-box {
-            background-color: var(--blue-100);
-            border: 1px solid var(--blue-80);
+            background: var(--glass-subsurface);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             padding: 10px 16px;
             border-radius: 12px;
             text-align: right;
@@ -193,7 +188,7 @@
 
         .reg-label {
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.85);
+            color: var(--text-secondary);
             margin-bottom: 2px;
         }
 
@@ -225,8 +220,8 @@
             height: 272px; /* Пропорція 3:4 */
             border-radius: 16px;
             overflow: hidden;
-            background-color: #18181C;
-            border: 1px solid var(--border-subtle);
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.22);
         }
 
         .photo-frame img {
@@ -238,8 +233,8 @@
         }
 
         .student-id-box {
-            background-color: var(--surface-elevated);
-            border: 1px solid var(--border-subtle);
+            background: var(--glass-subsurface);
+            border: 1px solid rgba(255, 255, 255, 0.16);
             border-radius: 12px;
             padding: 11px 14px;
             display: flex;
@@ -267,7 +262,7 @@
         }
 
         .person-header {
-            border-bottom: 1px solid var(--border-subtle);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
             padding-bottom: 18px;
         }
 
@@ -313,13 +308,13 @@
             line-height: 1.4;
         }
 
-        /* Блок номінації у кольорах Dodger Blue */
+        /* Блок номінації */
         .nomination-card {
             margin-top: 2px;
             padding: 16px 20px;
             border-radius: 14px;
-            background-color: rgba(91, 90, 255, 0.14);
-            border: 1px solid var(--blue-80);
+            background: var(--glass-subsurface);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -327,7 +322,7 @@
 
         .nomination-label {
             font-size: 12px;
-            color: var(--blue-40);
+            color: var(--text-secondary);
             font-weight: 500;
         }
 
@@ -341,8 +336,8 @@
            ЗАХИСНА БІЖУЧА СТРІЧКА З АКТУАЛЬНИМ ЧАСОМ (ЗАХИСТ ВІД СКРІНШОТІВ)
            ========================================================================== */
         .security-ticker {
-            background-color: var(--blue-100);
-            border-top: 1px solid var(--blue-80);
+            background: rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.14);
             padding: 10px 0;
             overflow: hidden;
             white-space: nowrap;
@@ -354,7 +349,7 @@
             animation: marquee 30s linear infinite;
             font-size: 12px;
             font-weight: 500;
-            color: #FFFFFF;
+            color: rgba(255, 255, 255, 0.9);
             letter-spacing: 0.3px;
         }
 
@@ -409,7 +404,7 @@
             </div>
         </header>
 
-        <!-- Основна картка -->
+        <!-- Основна напівпрозора картка -->
         <main class="document-card">
             <div class="card-header">
                 <div class="doc-title-group">
@@ -427,7 +422,7 @@
                 <div class="photo-column">
                     <div class="photo-frame">
                         <!-- Покладіть фото у корінь репозиторію з назвою photo.jpg -->
-                        <img src="photo.jpg" alt="Ісіков Ярослав Андрійович" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22204%22 height=%22272%22 viewBox=%220 0 204 272%22><rect width=%22204%22 height=%22272%22 fill=%22%231c1c22%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2398989d%22 font-family=%22sans-serif%22 font-size=%2213%22>Фото 3×4 (photo.jpg)</text></svg>'">
+                        <img src="photo.jpg" alt="Ісіков Ярослав Андрійович" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22204%22 height=%22272%22 viewBox=%220 0 204 272%22><rect width=%22204%22 height=%22272%22 fill=%22rgba(255,255,255,0.08)%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22rgba(255,255,255,0.7)%22 font-family=%22sans-serif%22 font-size=%2213%22>Фото 3×4 (photo.jpg)</text></svg>'">
                     </div>
 
                     <div class="student-id-box">
