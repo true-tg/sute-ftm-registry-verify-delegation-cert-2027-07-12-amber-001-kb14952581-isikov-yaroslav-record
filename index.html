@@ -88,6 +88,8 @@ h1{font-size:20px;line-height:1.2;font-weight:700}h1+p{font-size:13px;color:var(
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 // Статус: "auto" (за датами) | "revoked". У робочій версії приходить із сервера за токеном.
+// Посилання на файл у GitHub (raw). Якщо порожнє — QR веде на саму сторінку.
+var PDF_URL="";
 var CONFIG={status:"auto",revokedOn:"",start:new Date(2027,5,23),end:new Date(2027,5,25,23,59,59)};
 var S={
 valid:["Документ дійсний • Верифіковано реєстром ДТЕУ","Document is valid • Verified by SUTE Registry"],
@@ -102,11 +104,11 @@ function tick(){var d=new Date(),s=p(d.getDate())+"."+p(d.getMonth()+1)+"."+d.ge
 var t="Документ сформовано та перевірено автоматично • Дата та час запиту: "+s+" • ДТЕУ • ";document.getElementById("mq").textContent=t+t}
 tick();setInterval(tick,1000);
 var fl=document.getElementById("flip"),qd=false;
-function flip(){fl.classList.toggle("b");if(!qd&&window.QRCode){qd=true;new QRCode(document.getElementById("qr"),{text:location.href.split("#")[0],width:180,height:180,correctLevel:QRCode.CorrectLevel.M})}}
+function flip(){fl.classList.toggle("b");if(!qd&&window.QRCode){qd=true;new QRCode(document.getElementById("qr"),{text:PDF_URL||location.href.split("#")[0],width:180,height:180,correctLevel:QRCode.CorrectLevel.M})}}
 fl.onclick=function(e){if(e.target.closest(".cp"))return;flip()};
 fl.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};
 var tm;function toast(m){var t=document.getElementById("t");t.textContent=m;t.classList.add("s");clearTimeout(tm);tm=setTimeout(function(){t.classList.remove("s")},1600)}
 document.addEventListener("click",function(e){var c=e.target.closest(".cp");if(!c)return;var v=c.dataset.c;
 try{navigator.clipboard.writeText(v)}catch(x){}try{navigator.vibrate&&navigator.vibrate(20)}catch(x){}toast("Скопійовано")});
-document.getElementById("pdf").onclick=function(){toast("PDF буде доступний після підключення до реєстру")};
+document.getElementById("pdf").onclick=function(){if(PDF_URL){window.open(PDF_URL,"_blank")}else{toast("PDF ще не підключено")}};
 </script></body></html>
